@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+    <title>Sync File</title>
+    <link rel="stylesheet" href="css/themes/default/jquery.mobile-1.4.5.min.css">
+    <link rel="shortcut icon" href="img/favicon.ico">
+</head>
+<body>
+
+<div data-role="page" id="page-main">
+    <div data-role="header">
+        <div class="ui-grid-d center" data-position="fixed">
+            <div class="ui-block-a"></div>
+            <div class="ui-block-b"></div>
+            <div class="ui-block-c"><span id="on-off-status">offline</span></div>
+            <div class="ui-block-d"><a id="js-sync-get" class="ui-shadow ui-btn ui-corner-all ui-icon-refresh ui-btn-icon-notext ui-btn-inline">Button</a></div>
+            <div class="ui-block-e"><a href="#page-config" class="ui-shadow ui-btn ui-corner-all ui-icon-gear ui-btn-icon-notext ui-btn-inline">Button</a></div>
+        </div>
+        
+    </div>
+    <div role="main" class="ui-content" data-position="fixed">
+        <div id="texto" class="m-2">
+
+        </div>
+    </div>
+    <div data-role="footer">
+        
+    </div>
+</div>
+
+<div data-role="page" id="page-config">
+    <div data-role="header" data-position="fixed">
+        <div class="ui-grid-d center">
+            <div class="ui-block-a"></div>
+            <div class="ui-block-b"></div>
+            <div class="ui-block-c"><span id="on-off-status">Settings</span></div>
+            <div class="ui-block-d"></div>
+            <div class="ui-block-e"></div>
+        </div>
+    </div>
+    <div role="main" class="ui-content">
+        <div id="texto" class="m-2">
+            <form id="form-configs">
+                <label for="text-basic">URL to text file (.txt):</label>
+                <input type="text" name="url" value="">
+            </form>
+            <button id="js-configs-save" class="ui-shadow ui-btn ui-corner-all">Save</button>
+            <a href="#page-main" class="ui-shadow ui-btn ui-corner-all">Back</a>
+        </div>
+    </div>
+    <div data-role="footer" data-position="fixed">
+        
+    </div>
+</div>
+
+<script type="text/javascript" src="cordova.js"></script>
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<script type="text/javascript" src="js/jquery.mobile-1.4.5.min.js"></script>
+<script type="text/javascript" src="js/storage.js"></script>
+<script type="text/javascript" src="js/jquery.serializejson.min.js"></script>
+<script type="text/javascript" src="js/main.js"></script>
+
+</body>
+</html>
