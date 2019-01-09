@@ -128,8 +128,9 @@
                 $("#on-off-status").html("online");
                 $("#texto").html(newText);
                 set_syncfile(newText);
-            }).fail(function() {
-                $("#on-off-status").html("online failed");
+            }).fail(function(jqXHR, textStatus) {
+                $("#on-off-status").html("online but failed to retrieve data");
+                $("#error").html(textStatus);
                 $("#texto").html(textSaved);
             });
         }
