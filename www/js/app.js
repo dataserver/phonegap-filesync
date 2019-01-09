@@ -70,13 +70,13 @@ var App = {
         document.addEventListener('deviceready', this.onDeviceReady, false);
         document.addEventListener('offline', this.onOffline, false);
         document.addEventListener('online', this.onOnline, false);
-        document.addEventListener('pause', this.onPause, false);
-        document.addEventListener('resume', this.onResume, false);
-        document.addEventListener('volumeup', this.onVolumeUp, false);
-        document.addEventListener('volumedown', this.onVolumeDown, false);
+        // document.addEventListener('pause', this.onPause, false);
+        // document.addEventListener('resume', this.onResume, false);
+        // document.addEventListener('volumeup', this.onVolumeUp, false);
+        // document.addEventListener('volumedown', this.onVolumeDown, false);
         document.addEventListener('backbutton', this.onBackButton, true);
-        document.addEventListener('menubutton', this.onMenuButton, true);
-        document.addEventListener('searchbutton', this.onSearchButton, true);
+        // document.addEventListener('menubutton', this.onMenuButton, true);
+        // document.addEventListener('searchbutton', this.onSearchButton, true);
 
         // body.swipe({
         //     allowPageScroll:"vertical",
@@ -142,7 +142,7 @@ var App = {
 
             $("[data-role='page']").hide();
             $("#page-main").show();
-            if (configs.url=="") {
+            if (configs.url == "") {
                 $("#on-off-status").html("URL to file not defined");
                 $("#texto").html("Configure the URL to sync");
             } else {
@@ -152,9 +152,7 @@ var App = {
         $(".js-configs-save").click(function(){
             event.preventDefault();
             let formData = $("#form-configs").serializeJSON();
-console.log(formData);
             configs = set_config(formData);
-console.log(configs);
             updateText();
 
             $("[data-role='page']").hide();
@@ -174,7 +172,8 @@ console.log(configs);
     onResume: function(){},
     onVolumeUp: function(){},
     onVolumeDown: function(){},
-
+    onMenuButton: function(){},
+    onSearchButton: function(){},
     onBackButton: function(){
         if (App.exit_dlg === true) {
             App.exit();
@@ -184,7 +183,6 @@ console.log(configs);
             App.exit_dlg = false;
         });
     },
-
     exit: function(){
         navigator.app.exitApp();
     }
