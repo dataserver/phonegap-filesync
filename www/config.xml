@@ -18,5 +18,5 @@
     <access origin="*" />
 	<allow-intent href="http://*/*" />
 	<allow-intent href="https://*/*" />
-	<icon src="img/icon.png" />
+	<icon src="icon.png" />
 </widget>
