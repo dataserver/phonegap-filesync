@@ -2,28 +2,62 @@
 <html>
 <head>
     <meta charset="utf-8">
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="msapplication-tap-highlight" content="no" />
     <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' data:* gap://* tel:* 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; connect-src *; media-src *; img-src *; frame-src *" />
     <title>Sync File</title>
-    <link rel="stylesheet" href="css/themes/default/jquery.mobile-1.4.5.min.css">
+    <link rel="stylesheet" href="css/metro-all.min.css">
+    <link rel="stylesheet" href="css/app.css">
     <link rel="shortcut icon" href="img/favicon.ico">
 </head>
 <body>
 
+
 <div data-role="page" id="page-main">
     <div data-role="header">
-        <div class="ui-grid-d center" data-position="fixed">
-            <div class="ui-block-a"></div>
-            <div class="ui-block-b"></div>
-            <div class="ui-block-c"><span id="on-off-status">offline</span></div>
-            <div class="ui-block-d"><a id="js-sync-get" class="ui-shadow ui-btn ui-corner-all ui-icon-refresh ui-btn-icon-notext ui-btn-inline">Button</a></div>
-            <div class="ui-block-e"><a href="#page-config" class="ui-shadow ui-btn ui-corner-all ui-icon-gear ui-btn-icon-notext ui-btn-inline">Button</a></div>
+        <div class="grid">
+            <div class="row">
+                <div class="cell text-center"></div>    
+                <div class="cell text-center"><span id="on-off-status"></span></div>    
+                <div class="cell text-center"></div>    
+            </div>
         </div>
         
     </div>
-    <div role="main" class="ui-content" data-position="fixed">
-        <div id="error"></div>
-        <div id="texto" class="m-2">
+    <div role="main">
+        <div id="texto" class="m-8">
 
+        </div>
+    </div>
+    <div data-role="footer">
+        <div id="error" style="display: none;"></div>
+    </div>
+</div>
+
+<div data-role="page" id="page-config">
+    <div data-role="header">
+        <div class="grid">
+            <div class="row">
+                <div class="cell text-center"></div>    
+                <div class="cell text-center">Settings</div>    
+                <div class="cell text-center"></div>    
+            </div>
+        </div>
+    </div>
+    <div role="main">
+        <div id="texto" class="m-8">
+            <form id="form-configs">
+                <div class="form-group">
+                    <label>URL</label>
+                    <input type="text" name="url" value="" placeholder="http://address.com/to/some.txt">
+                    <small class="text-muted">Url to text file (.txt) .</small>
+                </div>
+            </form>
+            <div class="form-group">
+                    <button class="js-configs-save button primary outline">Save</button>
+                    <button class="js-go-page button secondary outline" data-page="page-main">Back</a>
+            </div>
         </div>
     </div>
     <div data-role="footer">
@@ -31,37 +65,42 @@
     </div>
 </div>
 
-<div data-role="page" id="page-config">
-    <div data-role="header" data-position="fixed">
-        <div class="ui-grid-d center">
-            <div class="ui-block-a"></div>
-            <div class="ui-block-b"></div>
-            <div class="ui-block-c"><span id="on-off-status">Settings</span></div>
-            <div class="ui-block-d"></div>
-            <div class="ui-block-e"></div>
-        </div>
-    </div>
-    <div role="main" class="ui-content">
-        <div id="texto" class="m-2">
-            <form id="form-configs">
-                <label for="text-basic">URL to text file (.txt):</label>
-                <input type="text" name="url" value="">
-            </form>
-            <button id="js-configs-save" class="ui-shadow ui-btn ui-corner-all">Save</button>
-            <a href="#page-main" class="ui-shadow ui-btn ui-corner-all">Back</a>
-        </div>
-    </div>
-    <div data-role="footer" data-position="fixed">
-        
-    </div>
+
+<div class="bottom-nav pos-absolute">
+    <button class="js-sync-get button">
+        <span class="icon mif-download2"></span>
+        <span class="label">Sync</span>
+    </button>
+    <button class="js-go-page button" data-page="page-main">
+        <span class="icon mif-home"></span>
+        <span class="label">Home</span>
+    </button>
+    <button class="js-go-page button" data-page="page-config">
+        <span class="icon mif-cog"></span>
+        <span class="label">Config</span>
+    </button>
 </div>
+
+
+
+
+
+
+
+
+
 
 <script type="text/javascript" src="cordova.js"></script>
 <script type="text/javascript" src="js/jquery.min.js"></script>
-<script type="text/javascript" src="js/jquery.mobile-1.4.5.min.js"></script>
+<script type="text/javascript" src="js/metro.min.js"></script>
+<script type="text/javascript" src="js/jquery.touchSwipe.min.js"></script>
 <script type="text/javascript" src="js/storage.js"></script>
 <script type="text/javascript" src="js/jquery.serializejson.min.js"></script>
+<script type="text/javascript" src="js/util.js"></script>
 <script type="text/javascript" src="js/app.js"></script>
 
+<script type="text/javascript">
+    App.init();
+</script>
 </body>
 </html>

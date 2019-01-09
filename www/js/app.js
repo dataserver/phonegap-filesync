@@ -1,88 +1,6 @@
-((() => { // avoid conflicts
     const DEFAULT_CONFIG = {
         url : ''
     };
-
-    // https://stackoverflow.com/questions/7298364/using-jquery-and-json-to-populate-forms
-    function populateForm($form, data) {
-        $.each(data, (key, value) => {// all json fields ordered by name
-            let $ctrls, $ctrl;
-
-            if (value instanceof Array){
-                $ctrls = $form.find("[name='" + key + "[]']"); //all form elements for a name. Multiple checkboxes can have the same name, but different values
-            } else {
-                $ctrls = $form.find("[name='" + key + "']");
-            }
-            if ($ctrls.is("select")) { //special form types
-                $("option", $ctrls).each(function() {
-                    if (this.value == value) {
-                        this.selected = true;
-                    }
-                });
-            } else if ($ctrls.is("textarea")) {
-                $ctrls.val(value);
-            } else {
-                switch ($ctrls.attr("type")) { //input type
-                    case "text":
-                    case "range":
-                    case "hidden":
-                        $ctrls.val(value);
-                        break;
-                    case "radio":
-                        if ($ctrls.length >= 1) {
-                            $.each($ctrls, function(index) { // every individual element
-                                let elemValue = $(this).attr("value");
-                                let singleVal = value;
-                                let elemValueInData = singleVal;
-
-                                if (elemValue == value) {
-                                    $(this).prop("checked", true);
-                                } else {
-                                    $(this).prop("checked", false);
-                                }
-                            });
-                        }
-                        break;
-                    case "checkbox":
-                        if ($ctrls.length > 1) {
-                            $.each($ctrls, function(index) { // every individual element
-                                let elemValue = $(this).attr("value");
-                                let elemValueInData;
-                                let singleVal;
-
-                                for (let i=0; i<value.length; i++) {
-                                    singleVal = value[i];
-                                    debug("singleVal", singleVal, "/value[i][1]", value[i][1]);
-                                    if (singleVal == elemValue) {
-                                        elemValueInData = singleVal;
-                                    }
-                                }
-                                if (elemValueInData) {
-                                    $(this).prop("checked", true);
-                                } else {
-                                    $(this).prop("checked", false);
-                                }
-                            });
-                        } else if ($ctrls.length == 1) {
-                            $ctrl = $ctrls;
-                            if (value) {
-                                $ctrl.prop("checked", true);
-                            } else {
-                                $ctrl.prop("checked", false);
-                            }
-                        }
-                        break;
-                }
-            }
-        });
-    }
-
-    function nl2br (str) {
-        str = (str + '').replace(/([^>\r\n]?)(\r\n|\n\r|\r|\n)/g, '$1<br>$2');
-        str = str.replace(/  /g, '&nbsp; ');
-        return str;
-    }
-
     // CONFIG
     function get_config() {
         // let raw = localStorage.getItem('configs');
@@ -130,13 +48,63 @@
                 set_syncfile(newText);
             }).fail(function(jqXHR, textStatus) {
                 $("#on-off-status").html("online but failed to retrieve data");
-                $("#error").html(textStatus);
+                //$("#error").html(textStatus);
                 $("#texto").html(textSaved);
             });
         }
     }
 
-    $(document).ready(function() {
+
+var App = {
+
+    exit_dlg: false,
+    sidebar: "#sidebar",
+
+    init: function(){
+        this.bindEvents();
+    },
+    
+    bindEvents: function(){
+        var body = $('body');
+
+        document.addEventListener('deviceready', this.onDeviceReady, false);
+        document.addEventListener('offline', this.onOffline, false);
+        document.addEventListener('online', this.onOnline, false);
+        document.addEventListener('pause', this.onPause, false);
+        document.addEventListener('resume', this.onResume, false);
+        document.addEventListener('volumeup', this.onVolumeUp, false);
+        document.addEventListener('volumedown', this.onVolumeDown, false);
+        document.addEventListener('backbutton', this.onBackButton, true);
+        document.addEventListener('menubutton', this.onMenuButton, true);
+        document.addEventListener('searchbutton', this.onSearchButton, true);
+
+        // body.swipe({
+        //     allowPageScroll:"vertical",
+        //     swipe: function(event, direction, distance, duration, fingerCount, fingerData){
+        //         var sidebar = $(App.sidebar).data('sidebar');
+
+        //         if (direction === 'right' && fingerData[0].start.x < 24) {
+        //             //if (!sidebar.isOpened()) {
+        //                 sidebar.open();
+        //                 //event.preventDefault();
+        //                 //event.stopPropagation();
+        //             //}
+        //         //} else if (sidebar.isOpened() && direction === 'left') {
+        //         } else if (direction === 'left') {
+        //             sidebar.close();
+        //             //event.preventDefault();
+        //             //event.stopPropagation();
+        //         } else {
+        //             // Swipe on screen
+
+        //         }
+        //     }
+        // });
+
+    },
+    
+    onDeviceReady: function(){
+
         let connectionStatus = "offline";
         let textSaved = get_syncfile();
         let configs = get_config();
@@ -149,15 +117,19 @@
            updateText();
         }
 
-        $(document).on("pagecontainershow", function () {
-            var activePage = $.mobile.pageContainer.pagecontainer("getActivePage");
-
-            var activePageId = activePage[0].id;
-            switch (activePageId) {
+        $(".js-go-page").click(function(){
+            event.preventDefault();
+            let page = $(this).attr('data-page');
+            
+            switch (page) {
                 case 'page-config':
                     populateForm($("#form-configs"), configs);
+                    $("[data-role='page']").hide();
+                    $("#page-config").show();
                     break;
                 case 'page-main':
+                    $("[data-role='page']").hide();
+                    $("#page-main").show();
                     break;
                 case 'page-x':
                     break;
@@ -165,8 +137,11 @@
             }
         });
 
-        $("#js-sync-get").click(function(){
+        $(".js-sync-get").click(function(){
             event.preventDefault();
+
+            $("[data-role='page']").hide();
+            $("#page-main").show();
             if (configs.url=="") {
                 $("#on-off-status").html("URL to file not defined");
                 $("#texto").html("Configure the URL to sync");
@@ -174,21 +149,43 @@
                 updateText();
             }
         });
-        $("#js-configs-save").click(function(){
+        $(".js-configs-save").click(function(){
             event.preventDefault();
             let formData = $("#form-configs").serializeJSON();
-
+console.log(formData);
             configs = set_config(formData);
-
-            $(':mobile-pagecontainer').pagecontainer('change', '#page-main', {
-                transition: 'flip',
-                changeHash: false,
-                reverse: true,
-                showLoadMsg: true
-            });
+console.log(configs);
             updateText();
+
+            $("[data-role='page']").hide();
+            $("#page-main").show();
         });
-    });
+        $("#page-main").show();
 
+    },
 
-}))();
+    onOffline: function(){
+        $("#on-off-status").html("Offline");
+    },
+    onOnline: function(){
+      $("#on-off-status").html("Online");  
+    },
+    onPause: function(){},
+    onResume: function(){},
+    onVolumeUp: function(){},
+    onVolumeDown: function(){},
+
+    onBackButton: function(){
+        if (App.exit_dlg === true) {
+            App.exit();
+        }
+        App.exit_dlg = true;
+        Metro.toast.create("Press the BACK button again to exit from Application", function(){
+            App.exit_dlg = false;
+        });
+    },
+
+    exit: function(){
+        navigator.app.exitApp();
+    }
+};
