@@ -3,7 +3,7 @@
 	xmlns="http://www.w3.org/ns/widgets" 
 	xmlns:gap="http://phonegap.com/ns/1.0"
 	id="com.cafelunar.syncfile" 
-	version="1.0.8" 
+	version="2" 
 >
     <name>Sync File</name>
     <description>
@@ -13,7 +13,7 @@
         cafelunar team
     </author>
     <platform name="android" />
-    <preference name="phonegap-version" value="cli-8.0.0" />
+    <preference name="phonegap-version" value="cli-6.5.0" />
     <content src="index.html" />
     <access origin="*" />
 	<allow-intent href="http://*/*" />
