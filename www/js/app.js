@@ -1,59 +1,54 @@
-    const DEFAULT_CONFIG = {
-        url : ''
-    };
-    // CONFIG
-    function get_config() {
-        // let raw = localStorage.getItem('configs');
-        // let cfg = JSON.parse(raw);
-        let cfg = storage.get('configs');
+const DEFAULT_CONFIG = {
+    url : ''
+};
+// CONFIG
+function get_config() {
+    let cfg = storage.get('configs');
 
-        return Object.assign({}, DEFAULT_CONFIG, cfg);
+    return Object.assign({}, DEFAULT_CONFIG, cfg);
+}
+function set_config(cfg) {
+
+    storage.set('configs', cfg);
+    return cfg;
+}
+// Synced file
+function get_syncfile() {
+
+    return storage.get('texto');
+}
+function set_syncfile(content = "") {
+
+    storage.set('texto', content);
+
+    return content;
+}
+
+function updateText() {
+    let configs = get_config();
+    let textSaved = get_syncfile();
+
+    if (configs.url == "") {
+        $("#service-status").html("Error");
+        $("#file-content").html("Configure the URL to sync");
+    } else {
+        $.ajax({
+            url : configs.url,
+            cache: false,
+        }).done(function(result){
+            let newText = nl2br(result);
+
+            $("#service-status").html("online");
+            $("#file-content").html(newText);
+            Metro.notify.create("Synced", null, {cls: "info"});
+            set_syncfile(newText);
+        }).fail(function(jqXHR, textStatus) {
+            Metro.notify.create("online but failed to retrieve data", "Alert", {cls: "alert"});
+            $("#service-status").html("online");
+            $("#file-content").html(textSaved);
+        });
     }
-    function set_config(cfg) {
-
-        //localStorage.setItem("configs", JSON.stringify(cfg));
-        storage.set('configs', cfg);
-        return cfg;
-    }
-    // Synced file
-    function get_syncfile() {
-        //let raw = localStorage.getItem('texto');
-        //return JSON.parse(raw);
-        return storage.get('texto');
-    }
-    function set_syncfile(content="") {
-
-        //localStorage.setItem("texto", JSON.stringify(content));
-        storage.set('texto', content);
-
-        return content;
-    }
-
-    function updateText() {
-        let configs = get_config();
-        let textSaved = get_syncfile();
-
-        if (configs.url=="") {
-            $("#on-off-status").html("URL to file not defined");
-            $("#texto").html("Configure the URL to sync");
-        } else {
-            $.ajax({
-                url : configs.url,
-                cache: false,
-            }).done(function(result){
-                let newText = nl2br(result);
-
-                $("#on-off-status").html("online");
-                $("#texto").html(newText);
-                set_syncfile(newText);
-            }).fail(function(jqXHR, textStatus) {
-                $("#on-off-status").html("online but failed to retrieve data");
-                //$("#error").html(textStatus);
-                $("#texto").html(textSaved);
-            });
-        }
-    }
-
+}
 
 var App = {
 
@@ -62,6 +57,12 @@ var App = {
 
     init: function(){
         this.bindEvents();
+		Metro.notify.setup({
+		            width: 300,
+		            duration: 200,
+		            distance: '40vh',
+		            animation: 'easeInOutQuint'
+		        });
     },
     
     bindEvents: function(){
@@ -112,9 +113,9 @@ var App = {
         connectionStatus = navigator.onLine ? "online" : "offline";
 
         if (connectionStatus == "offline") {
-            $("#texto").html(textSaved);
+            $("#file-content").html(textSaved);
         } else {
-           updateText();
+        	updateText();
         }
 
         $(".js-go-page").click(function(){
@@ -143,8 +144,8 @@ var App = {
             $("[data-role='page']").hide();
             $("#page-main").show();
             if (configs.url == "") {
-                $("#on-off-status").html("URL to file not defined");
-                $("#texto").html("Configure the URL to sync");
+                $("#service-status").html("URL to file not defined");
+                $("#file-content").html("Configure the URL to sync");
             } else {
                 updateText();
             }
@@ -152,9 +153,10 @@ var App = {
         $(".js-configs-save").click(function(){
             event.preventDefault();
             let formData = $("#form-configs").serializeJSON();
-            configs = set_config(formData);
-            updateText();
 
+            configs = set_config(formData);
+            Metro.notify.create("Saved");
+            updateText();
             $("[data-role='page']").hide();
             $("#page-main").show();
         });
@@ -163,10 +165,10 @@ var App = {
     },
 
     onOffline: function(){
-        $("#on-off-status").html("Offline");
+        $("#service-status").html("Offline");
     },
     onOnline: function(){
-      $("#on-off-status").html("Online");  
+		$("#service-status").html("Online");  
     },
     onPause: function(){},
     onResume: function(){},
