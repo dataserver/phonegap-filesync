@@ -1,4 +1,5 @@
 // https://stackoverflow.com/questions/7298364/using-jquery-and-json-to-populate-forms
+// require jquery
 function populateForm($form, data) {
     $.each(data, (key, value) => {// all json fields ordered by name
         let $ctrls, $ctrl;
@@ -47,7 +48,6 @@ function populateForm($form, data) {
 
                             for (let i=0; i<value.length; i++) {
                                 singleVal = value[i];
-                                debug("singleVal", singleVal, "/value[i][1]", value[i][1]);
                                 if (singleVal == elemValue) {
                                     elemValueInData = singleVal;
                                 }

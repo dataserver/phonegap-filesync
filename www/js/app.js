@@ -111,14 +111,13 @@ var App = {
         let configs = get_config();
 
         connectionStatus = navigator.onLine ? "online" : "offline";
-
         if (connectionStatus == "offline") {
             $("#file-content").html(textSaved);
         } else {
         	updateText();
         }
 
-        $(".js-go-page").click(function(){
+        $(".js-go-page").click(function(event){
             event.preventDefault();
             let page = $(this).attr('data-page');
             
@@ -137,8 +136,7 @@ var App = {
                 default:
             }
         });
-
-        $(".js-sync-get").click(function(){
+        $(".js-sync-get").click(function(event){
             event.preventDefault();
 
             $("[data-role='page']").hide();
@@ -150,7 +148,7 @@ var App = {
                 updateText();
             }
         });
-        $(".js-configs-save").click(function(){
+        $(".js-configs-save").click(function(event){
             event.preventDefault();
             let formData = $("#form-configs").serializeJSON();
 
@@ -161,8 +159,9 @@ var App = {
             $("#page-main").show();
         });
         $("#page-main").show();
-
     },
+
+
 
     onOffline: function(){
         $("#service-status").html("Offline");

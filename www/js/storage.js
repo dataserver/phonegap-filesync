@@ -1,7 +1,6 @@
 let storage = {
     version : 1,
-    enabled : true,
-    compress: true,
+    // compress: true,
     options : {
         prefix : ''
     },
