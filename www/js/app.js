@@ -1,5 +1,5 @@
 const DEFAULT_CONFIG = {
-    url : '',
+    url: '',
     file_is_markdown: 'github',
 };
 // CONFIG
@@ -8,6 +8,7 @@ function get_config() {
 
     return Object.assign({}, DEFAULT_CONFIG, cfg);
 }
+
 function set_config(cfg) {
 
     storage.set('configs', cfg);
@@ -19,12 +20,14 @@ function get_syncfile() {
 
     return storage.get('texto');
 }
+
 function set_syncfile(content = "") {
 
     storage.set('texto', content);
 
     return content;
 }
+
 function icon_is_online(is_online = true) {
     if (is_online) {
         return `<i class="fa fa-globe" style="color:green;"></i>`;
@@ -32,6 +35,7 @@ function icon_is_online(is_online = true) {
         return `<span class="fa-stack"><i class="fa fa-globe"></i><i class="fa fa-ban fa-stack-2x"></i></span>`;
     }
 }
+
 function updateText() {
     let configs = get_config();
     let textSaved = get_syncfile();
@@ -41,20 +45,21 @@ function updateText() {
         $("#file-content").html("Configure the URL to sync");
     } else {
         $.ajax({
-            url : configs.url,
+            url: configs.url,
             cache: false,
-        }).done(function(result){
+        }).done(function (result) {
             let newText;
             if (configs.file_is_markdown != "") {
                 var converter = new showdown.Converter();
-                converter.setFlavor( configs.file_is_markdown );
+                converter.setFlavor(configs.file_is_markdown);
                 newText = converter.makeHtml(result);
             } else {
                 newText = nl2br(result);
             }
             $("#file-content").html(newText);
             set_syncfile(newText);
-        }).fail(function(jqXHR, textStatus) {
+            toastr.success("Sync done");
+        }).fail(function (jqXHR, textStatus) {
             toastr.error("Failed to sync");
             $("#file-content").html(textSaved);
         });
@@ -65,29 +70,29 @@ var App = {
 
     exit_dlg: false,
     sidebar: "#sidebar",
-    init: function(){
+    init: function () {
         this.bindEvents();
-        
+
         toastr.options = {
-        "closeButton": false,
-        "debug": false,
-        "newestOnTop": false,
-        "progressBar": false,
-        "positionClass": "toast-top-center",
-        "preventDuplicates": false,
-        "onclick": null,
-        "showDuration": "300",
-        "hideDuration": "1000",
-        "timeOut": "5000",
-        "extendedTimeOut": "1000",
-        "showEasing": "swing",
-        "hideEasing": "linear",
-        "showMethod": "fadeIn",
-        "hideMethod": "fadeOut"
+            "closeButton": false,
+            "debug": false,
+            "newestOnTop": false,
+            "progressBar": false,
+            "positionClass": "toast-top-center",
+            "preventDuplicates": false,
+            "onclick": null,
+            "showDuration": "300",
+            "hideDuration": "1000",
+            "timeOut": "5000",
+            "extendedTimeOut": "1000",
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut"
         }
     },
-    
-    bindEvents: function(){
+
+    bindEvents: function () {
         var body = $('body');
 
         document.addEventListener('deviceready', this.onDeviceReady, false);
@@ -125,8 +130,8 @@ var App = {
         // });
 
     },
-    
-    onDeviceReady: function(){
+
+    onDeviceReady: function () {
 
         let connectionStatus = "offline";
         let textSaved = get_syncfile();
@@ -134,17 +139,17 @@ var App = {
 
         connectionStatus = navigator.onLine ? "online" : "offline";
         if (connectionStatus == "offline") {
-            $("#service-status").html( icon_is_online(false) + " offline");
+            $("#service-status").html(icon_is_online(false) + " offline");
             $("#file-content").html(textSaved);
         } else {
-            $("#service-status").html( icon_is_online() + " online");
-        	updateText();
+            $("#service-status").html(icon_is_online() + " online");
+            updateText();
         }
 
-        $(".js-go-page").click(function(event){
+        $(".js-go-page").click(function (event) {
             event.preventDefault();
             let page = $(this).attr('data-page');
-            
+
             switch (page) {
                 case 'page-config':
                     populateForm($("#form-configs"), configs);
@@ -160,7 +165,7 @@ var App = {
                 default:
             }
         });
-        $(".js-sync-get").click(function(event){
+        $(".js-sync-get").click(function (event) {
             event.preventDefault();
 
             $("[data-role='page']").hide();
@@ -172,7 +177,7 @@ var App = {
                 updateText();
             }
         });
-        $(".js-configs-save").click(function(event){
+        $(".js-configs-save").click(function (event) {
             event.preventDefault();
             let formData = $("#form-configs").serializeJSON();
 
@@ -186,26 +191,26 @@ var App = {
 
 
 
-    onOffline: function(){
+    onOffline: function () {
         $("#service-status").html("Offline");
     },
-    onOnline: function(){
-		$("#service-status").html("Online");  
+    onOnline: function () {
+        $("#service-status").html("Online");
     },
-    onPause: function(){},
-    onResume: function(){},
-    onVolumeUp: function(){},
-    onVolumeDown: function(){},
-    onMenuButton: function(){},
-    onSearchButton: function(){},
-    onBackButton: function(){
+    onPause: function () {},
+    onResume: function () {},
+    onVolumeUp: function () {},
+    onVolumeDown: function () {},
+    onMenuButton: function () {},
+    onSearchButton: function () {},
+    onBackButton: function () {
         if (App.exit_dlg === true) {
             App.exit();
         }
         App.exit_dlg = true;
 
     },
-    exit: function(){
+    exit: function () {
         navigator.app.exitApp();
     }
 };

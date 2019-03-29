@@ -3,7 +3,7 @@
 	xmlns="http://www.w3.org/ns/widgets" 
 	xmlns:gap="http://phonegap.com/ns/1.0"
 	id="com.cafelunar.syncfile" 
-	version="6" 
+	version="7" 
 >
     <name>Sync File</name>
     <description>
