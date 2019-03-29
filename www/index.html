@@ -5,93 +5,88 @@
     <meta name="format-detection" content="telephone=no" />
     <meta name="msapplication-tap-highlight" content="no" />
     <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self' data:* gap://* tel:* 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; connect-src *; media-src *; img-src *; frame-src *" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' data:* gap://* tel:* 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; connect-src *; media-src *; img-src * 'self' data: https:; frame-src *" />
     <title>Sync File</title>
-    <link rel="stylesheet" href="css/metro-all.min.css">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/font-awesome-4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="css/toastr.min.css">
     <link rel="stylesheet" href="css/app.css">
     <link rel="shortcut icon" href="img/favicon.ico">
 </head>
 <body>
-
-
 <div data-role="page" id="page-main">
-    <div data-role="header">
-        <div class="grid">
-            <div class="row">
-                <div class="cell text-center"></div>    
-                <div class="cell text-center"><span id="service-status">offline</span></div>    
-                <div class="cell text-center"></div>    
+    <div class="container">
+        <div data-role="header">
+                <div class="row">
+                    <div class="col text-center"><span id="service-status">offline</span></div>    
+                </div>
+        </div>
+        <div role="main">
+            <div id="file-content" class="m-8">
+
             </div>
         </div>
-        
-    </div>
-    <div role="main">
-        <div id="file-content" class="m-8">
-
+        <div data-role="footer">
+            <div id="error" style="display: none;"></div>
         </div>
-    </div>
-    <div data-role="footer">
-        <div id="error" style="display: none;"></div>
     </div>
 </div>
 
 <div data-role="page" id="page-config">
-    <div data-role="header">
-        <div class="grid">
-            <div class="row">
-                <div class="cell text-center"></div>    
-                <div class="cell text-center">Settings</div>    
-                <div class="cell text-center"></div>    
+    <div class="container">
+        <div data-role="header">
+                <div class="row">
+                    <div class="col text-center">Settings</div>    
+                </div>
+        </div>
+        <div role="main">
+            <div class="m-8">
+                <form id="form-configs" class="form">
+                    <div class="form-group">
+                        <label for="url">URL</label>
+                        <input class="form-control" type="text" name="url" id="url" value="" placeholder="http://address.com/to/some.txt">
+                        <small class="text-muted">Url to text file (.txt) .</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="file_is_markdown">File has Markdown?</label>
+                        <select class="form-control" name="file_is_markdown" id="file_is_markdown">
+                            <option value="">No</option>
+                            <option value="vanilla">vanilla</option>
+                            <option value="github">Github Flavour</option>
+                            <option vlaue="original">original from John Gruber's spec</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <button class="js-configs-save btn btn-primary btn-lg btn-block">Save</button>
+                        <button class="js-go-page button btn btn-secondary btn-lg btn-block" data-page="page-main">Back</a>
+                    </div>
+                </form>
             </div>
         </div>
-    </div>
-    <div role="main">
-        <div class="m-8">
-            <form id="form-configs">
-                <div class="form-group">
-                    <label>URL</label>
-                    <input type="text" name="url" value="" placeholder="http://address.com/to/some.txt">
-                    <small class="text-muted">Url to text file (.txt) .</small>
-                </div>
-                <div class="form-group">
-                    <label for="file_is_markdown">File has Markdown?</label>
-                    <select class="form-control" id="file_is_markdown">
-                        <option value="">No</option>
-                        <option value="vanilla">vanilla</option>
-                        <option value="github">Github Flavour</option>
-                        <option vlaue="original">original from John Gruber's spec</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <button class="js-configs-save button primary outline">Save</button>
-                    <button class="js-go-page button secondary outline" data-page="page-main">Back</a>
-                </div>
-            </form>
+        <div data-role="footer">
+            
         </div>
-    </div>
-    <div data-role="footer">
-        
     </div>
 </div>
 
 <div class="fixed-bottom">
-    <div class="row" style="background-color:#ebebeb;">
-        <div class="cell">
-            <button class="js-sync-get button">
-                <span class="icon mif-download2"></span>
-                <span class="label">Sync</span>
+    <div class="row bg-secondary">
+        <div class="col">
+            <button class="js-sync-get btn btn-secondary">
+                <i class="fa fa-download" aria-hidden="true"></i>
+                <span class="label no-visible-sd">Sync</span>
             </button>
         </div>
-        <div class="cell">
-            <button class="js-go-page button" data-page="page-main">
-                <span class="icon mif-home"></span>
-                <span class="label">Home</span>
+        <div class="col">
+            <button class="js-go-page btn btn-secondary" data-page="page-main">
+                <i class="fa fa-home" aria-hidden="true"></i>
+                <span class="label no-visible-sd">Home</span>
             </button>
         </div>
-        <div class="cell">
-            <button class="js-go-page button" data-page="page-config">
-                <span class="icon mif-cog"></span>
-                <span class="label">Config</span>
+        <div class="col">
+            <button class="js-go-page btn btn-secondary" data-page="page-config">
+                <i class="fa fa-cog" aria-hidden="true"></i>
+                <span class="label no-visible-sd">Config</span>
             </button>
         </div>
     </div>
@@ -103,7 +98,9 @@
 
 <script type="text/javascript" src="cordova.js"></script>
 <script type="text/javascript" src="js/jquery.min.js"></script>
-<script type="text/javascript" src="js/metro.min.js"></script>
+<script type="text/javascript" src="js/bootstrap.min.js"></script>
+<script type="text/javascript" src="js/toastr.min.js"></script>
+
 <!-- <script type="text/javascript" src="js/alasql.min.js"></script> -->
 <!-- <script type="text/javascript" src="js/jquery.touchSwipe.min.js"></script> -->
 <script type="text/javascript" src="js/storage.js"></script>

@@ -11,6 +11,7 @@ function get_config() {
 function set_config(cfg) {
 
     storage.set('configs', cfg);
+    toastr.success("Saved");
     return cfg;
 }
 // Synced file
@@ -24,13 +25,19 @@ function set_syncfile(content = "") {
 
     return content;
 }
-
+function icon_is_online(is_online = true) {
+    if (is_online) {
+        return `<i class="fa fa-globe" style="color:green;"></i>`;
+    } else {
+        return `<span class="fa-stack"><i class="fa fa-globe"></i><i class="fa fa-ban fa-stack-2x"></i></span>`;
+    }
+}
 function updateText() {
     let configs = get_config();
     let textSaved = get_syncfile();
 
     if (configs.url == "") {
-        $("#service-status").html("Error");
+        toastr.error("Missing configuration");
         $("#file-content").html("Configure the URL to sync");
     } else {
         $.ajax({
@@ -45,13 +52,10 @@ function updateText() {
             } else {
                 newText = nl2br(result);
             }
-            $("#service-status").html("online");
             $("#file-content").html(newText);
-            Metro.notify.create("Synced", null, {cls: "info"});
             set_syncfile(newText);
         }).fail(function(jqXHR, textStatus) {
-            Metro.notify.create("online but failed to retrieve data", "Alert", {cls: "alert"});
-            $("#service-status").html("online");
+            toastr.error("Failed to sync");
             $("#file-content").html(textSaved);
         });
     }
@@ -61,15 +65,26 @@ var App = {
 
     exit_dlg: false,
     sidebar: "#sidebar",
-
     init: function(){
         this.bindEvents();
-		Metro.notify.setup({
-		            width: 300,
-		            duration: 200,
-		            distance: '40vh',
-		            animation: 'easeInOutQuint'
-		        });
+        
+        toastr.options = {
+        "closeButton": false,
+        "debug": false,
+        "newestOnTop": false,
+        "progressBar": false,
+        "positionClass": "toast-top-center",
+        "preventDuplicates": false,
+        "onclick": null,
+        "showDuration": "300",
+        "hideDuration": "1000",
+        "timeOut": "5000",
+        "extendedTimeOut": "1000",
+        "showEasing": "swing",
+        "hideEasing": "linear",
+        "showMethod": "fadeIn",
+        "hideMethod": "fadeOut"
+        }
     },
     
     bindEvents: function(){
@@ -119,8 +134,10 @@ var App = {
 
         connectionStatus = navigator.onLine ? "online" : "offline";
         if (connectionStatus == "offline") {
+            $("#service-status").html( icon_is_online(false) + " offline");
             $("#file-content").html(textSaved);
         } else {
+            $("#service-status").html( icon_is_online() + " online");
         	updateText();
         }
 
@@ -149,7 +166,7 @@ var App = {
             $("[data-role='page']").hide();
             $("#page-main").show();
             if (configs.url == "") {
-                $("#service-status").html("URL to file not defined");
+                toastr.error("URL to file not defined");
                 $("#file-content").html("Configure the URL to sync");
             } else {
                 updateText();
@@ -160,7 +177,6 @@ var App = {
             let formData = $("#form-configs").serializeJSON();
 
             configs = set_config(formData);
-            Metro.notify.create("Saved");
             updateText();
             $("[data-role='page']").hide();
             $("#page-main").show();
@@ -187,9 +203,7 @@ var App = {
             App.exit();
         }
         App.exit_dlg = true;
-        Metro.toast.create("Press the BACK button again to exit from Application", function(){
-            App.exit_dlg = false;
-        });
+
     },
     exit: function(){
         navigator.app.exitApp();
