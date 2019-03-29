@@ -1,5 +1,6 @@
 const DEFAULT_CONFIG = {
-    url : ''
+    url : '',
+    file_is_markdown: 'github',
 };
 // CONFIG
 function get_config() {
@@ -36,8 +37,14 @@ function updateText() {
             url : configs.url,
             cache: false,
         }).done(function(result){
-            let newText = nl2br(result);
-
+            let newText;
+            if (configs.file_is_markdown != "") {
+                var converter = new showdown.Converter();
+                converter.setFlavor( configs.file_is_markdown );
+                newText = converter.makeHtml(result);
+            } else {
+                newText = nl2br(result);
+            }
             $("#service-status").html("online");
             $("#file-content").html(newText);
             Metro.notify.create("Synced", null, {cls: "info"});
