@@ -2,15 +2,15 @@
 <widget 
 	xmlns="http://www.w3.org/ns/widgets" 
 	xmlns:gap="http://phonegap.com/ns/1.0"
-	id="com.cafelunar.syncfile" 
+	id="com.github.dataserver.syncfile" 
 	version="7" 
 >
     <name>Sync File</name>
     <description>
         Simple txt file sync.
     </description>
-    <author email="phonegap@cafelunar.com" href="http://cafelunar.com">
-        cafelunar team
+    <author email="dataserver@users.noreply.github.com" href="http://dataserver.github.io">
+        dataserver
     </author>
     <platform name="android" />
     <preference name="phonegap-version" value="cli-6.5.0" />
