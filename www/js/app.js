@@ -105,12 +105,10 @@ var App = {
         document.addEventListener('backbutton', this.onBackButton, true);
         // document.addEventListener('menubutton', this.onMenuButton, true);
         // document.addEventListener('searchbutton', this.onSearchButton, true);
-
         // body.swipe({
         //     allowPageScroll:"vertical",
         //     swipe: function(event, direction, distance, duration, fingerCount, fingerData){
         //         var sidebar = $(App.sidebar).data('sidebar');
-
         //         if (direction === 'right' && fingerData[0].start.x < 24) {
         //             //if (!sidebar.isOpened()) {
         //                 sidebar.open();
@@ -124,15 +122,12 @@ var App = {
         //             //event.stopPropagation();
         //         } else {
         //             // Swipe on screen
-
         //         }
         //     }
         // });
-
     },
 
     onDeviceReady: function () {
-
         let connectionStatus = "offline";
         let textSaved = get_syncfile();
         let configs = get_config();
