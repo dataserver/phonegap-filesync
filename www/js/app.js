@@ -30,9 +30,9 @@ function set_syncfile(content = "") {
 
 function icon_is_online(is_online = true) {
     if (is_online) {
-        return `<i class="fa fa-globe" style="color:green;"></i>`;
+        return `<i class="fas fa-globe-americas" style="color:green;"></i>`;
     } else {
-        return `<span class="fa-stack"><i class="fa fa-globe"></i><i class="fa fa-ban fa-stack-2x"></i></span>`;
+        return `<span class="fa-stack"><i class="fas fa-globe-americas"></i><i class="fas fa-ban fa-stack-2x"></i></span>`;
     }
 }
 
@@ -96,13 +96,13 @@ var App = {
         var body = $('body');
 
         document.addEventListener('deviceready', this.onDeviceReady, false);
-        document.addEventListener('offline', this.onOffline, false);
-        document.addEventListener('online', this.onOnline, false);
+        // document.addEventListener('offline', this.onOffline, false);
+        // document.addEventListener('online', this.onOnline, false);
         // document.addEventListener('pause', this.onPause, false);
         // document.addEventListener('resume', this.onResume, false);
         // document.addEventListener('volumeup', this.onVolumeUp, false);
         // document.addEventListener('volumedown', this.onVolumeDown, false);
-        document.addEventListener('backbutton', this.onBackButton, true);
+        // document.addEventListener('backbutton', this.onBackButton, true);
         // document.addEventListener('menubutton', this.onMenuButton, true);
         // document.addEventListener('searchbutton', this.onSearchButton, true);
         // body.swipe({
@@ -183,9 +183,6 @@ var App = {
         });
         $("#page-main").show();
     },
-
-
-
     onOffline: function () {
         $("#service-status").html("Offline");
     },
@@ -203,7 +200,6 @@ var App = {
             App.exit();
         }
         App.exit_dlg = true;
-
     },
     exit: function () {
         navigator.app.exitApp();
