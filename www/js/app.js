@@ -49,8 +49,23 @@ function updateText() {
             cache: false,
         }).done(function (result) {
             let newText;
+
+            const classMap = {
+                blockquote: 'blockquote pl-4 bg-light',
+                table: 'table table-bordered',
+            }
+
+            const bindings = Object.keys(classMap)
+            .map(key => ({
+                type: 'output',
+                regex: new RegExp(`<${key}(.*)>`, 'g'),
+                replace: `<${key} class="${classMap[key]}" $1>`
+            }));
+
             if (configs.file_is_markdown != "") {
-                var converter = new showdown.Converter();
+                var converter = new showdown.Converter({
+                    extensions: [...bindings]
+                    });
                 converter.setFlavor(configs.file_is_markdown);
                 newText = converter.makeHtml(result);
             } else {
